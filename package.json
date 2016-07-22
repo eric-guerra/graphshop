@@ -1,0 +1,19 @@
+{
+  "name": "graphshop",
+  "version": "1.0.0",
+  "description": "GraphQL product API gateway with DataLoader batching over MongoDB and downstream services",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test \"test/**/*.test.js\""
+  },
+  "engines": { "node": ">=21" },
+  "license": "MIT",
+  "dependencies": {
+    "@graphql-tools/schema": "^10.0.4",
+    "dataloader": "^2.2.2",
+    "express": "^4.19.2",
+    "graphql": "^16.9.0",
+    "mongodb": "^6.8.0"
+  }
+}
