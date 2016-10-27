@@ -1,0 +1,94 @@
+"""Opaque cursor for Relay-style pagination."""
+scalar Cursor
+
+type Query {
+  product(id: ID!): Product
+  products(first: Int = 20, after: Cursor, category: String, search: String, sort: ProductSort = NAME): ProductConnection!
+  brand(id: ID!): Brand
+  categories: [Category!]!
+}
+
+type Mutation {
+  addReview(input: AddReviewInput!): AddReviewPayload!
+}
+
+enum ProductSort { NAME PRICE_ASC PRICE_DESC }
+
+type Product {
+  id: ID!
+  sku: String!
+  name: String!
+  description: String
+  priceCents: Int!
+  price: String!
+  category: String!
+  brand: Brand
+  """Average review rating, or null when there are no reviews."""
+  rating: Float
+  reviewCount: Int!
+  reviews(first: Int = 5): [Review!]!
+  inventory: Inventory
+  related(first: Int = 4): [Product!]!
+}
+
+type Brand {
+  id: ID!
+  name: String!
+  products(first: Int = 10): [Product!]!
+}
+
+type Review {
+  id: ID!
+  rating: Int!
+  title: String
+  body: String!
+  author: String!
+  createdAt: String!
+}
+
+type Inventory {
+  available: Int!
+  status: StockStatus!
+}
+
+enum StockStatus { IN_STOCK LOW_STOCK OUT_OF_STOCK }
+
+type Category {
+  name: String!
+  productCount: Int!
+}
+
+type ProductConnection {
+  edges: [ProductEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ProductEdge {
+  cursor: Cursor!
+  node: Product!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: Cursor
+}
+
+input AddReviewInput {
+  productId: ID!
+  rating: Int!
+  title: String
+  body: String!
+  author: String!
+}
+
+type AddReviewPayload {
+  review: Review
+  product: Product
+  errors: [UserError!]!
+}
+
+type UserError {
+  field: String
+  message: String!
+}
